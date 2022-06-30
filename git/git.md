@@ -25,6 +25,8 @@ git config --global user.email "sam0411@yeah.net"
 git config --global --unset http.proxy
 git config --global push.default matching
 git config --global color.ui true
+git config --list
+git config --list --show-origin
 git init
 git config core.ignorecase false
 
