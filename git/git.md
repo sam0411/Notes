@@ -35,6 +35,11 @@ ssh-keygen -t rsa -C "sam0411@yeah.net"
 
 ssh git@github.com
 
+## git large file storage
+git lfs install
+git lfs track "*.wav" 
+git add .gitattributes
+
 ## add, commit, push | rm | checkout
 git add <file name to add to git>
 git add -A <file name to add to git>
