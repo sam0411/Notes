@@ -248,6 +248,9 @@
 	docker images --no-trunc
 	docker images --digests
 
+	# list docker images with specific format
+	docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}\t{{.Digest}}"
+
 	# list docker images whose name is helloworld
 	docker images helloworld
 
@@ -369,4 +372,37 @@
 	ENTRYPOINT ["java","-jar","/app.jar"]
 	# Dockerfile 03 - Build
 	docker build --build-arg JAR_FILE=target/*.jar -t springboot_restful_03 .
+
+	# Dockerfile 04 - Source
+	FROM amazoncorretto:8-alpine
+	ARG JAR_FILE=service-hk-sample-web/target/*.jar
+	COPY ${JAR_FILE} app.jar
+	ENV JAVA_OPTS="\
+	-Dspring.profiles.active=DEVELOPING \
+	-Duser.timezone=Asia/Hong_Kong \
+	-server \
+	-Xmx1g \
+	-Xms1g \
+	-Xmn512m \
+	-XX:SurvivorRatio=8 \
+	-XX:MetaspaceSize=256m \
+	-XX:MaxMetaspaceSize=512m \
+	-XX:+UseParallelGC \
+	-XX:ParallelGCThreads=4 \
+	-XX:+UseParallelOldGC \
+	-XX:+UseAdaptiveSizePolicy \
+	-XX:+PrintGCDetails \
+	-XX:+PrintTenuringDistribution \
+	-XX:+PrintGCTimeStamps \
+	-XX:+HeapDumpOnOutOfMemoryError \
+	-XX:HeapDumpPath=/ \
+	-Xloggc:/gc.log \
+	-XX:+UseGCLogFileRotation \
+	-XX:NumberOfGCLogFiles=5 \
+	-XX:GCLogFileSize=10M
+	"
+	EXPOSE 8080
+	ENTRYPOINT java ${JAVA_OPTS} -jar /app.jar #ENTRYPOINT ["java", "-jar","/app.jar"]
+	# Dockerfile 04 - Build
+	docker build  -t springboot_restful_04 .
 ```
